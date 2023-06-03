@@ -3,9 +3,8 @@
    become: true 
    tasks:
   
-   
    - name: install apache and php packages
-     apt:
+     package:
       name:
        - "{{ apache_pakage }}"
        - "{{ php_pakage }}"
