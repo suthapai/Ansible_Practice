@@ -52,28 +52,10 @@
       state: latest
      when: ansible_distribution  == "CentOS"
    - name: start httpd(centos)
-     tags: centos,httpd,apache
+     tags: httpd,apache,apache2
      service:
        name: httpd
        state: started
-       enabled: yes
-     when: ansible_distribution == "CentOS"
-   - name: change e-mail for admin
-     tags: httpd,apache,centos
-     lineinfile: 
-       path: /etc/httpd/conf/httpd.conf
-       regexp: '^ServerAdmin'
-       line: ServerAdmin somebody@somewhere.net
-     when: ansible_distribution == "CentOS"
-     register: httpd
-   - name: restart httpd(CentOS)
-     tags: centos,httpd,apache
-     service:
-       name: httpd
-       state: restarted
-     when: httpd.changed   
- 
-
    - name: copying default html file for site
      tags: apache,apache2,httpd
      copy: 
@@ -83,10 +65,9 @@
       group: root
       mode: 0644
 
- 
-- hosts: db_servers
-  become: true
-  tasks:
+-  hosts: db_servers
+   become: true
+   tasks:
     - name: install mariadb package(CentOS)
       tags: centos,db,mariadb
       dnf:
